@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SREFlow - AI 驱动的 SRE 工作流自动化平台</title>
+  <meta name="description" content="SREFlow 将告警响应、故障诊断与根因分析编排为可复用的 Workflow，赋能 SRE 团队实现智能化运维。">
+  <style>
+    /* ========== Reset & Base ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #FFFFFF;
+      --primary-light: #E0E0E0;
+      --primary-dark: #CCCCCC;
+      --accent: #FFFFFF;
+      --accent-light: #F5F5F5;
+      --bg-dark: #000000;
+      --bg-card: #0A0A0A;
+      --bg-card-hover: #141414;
+      --text: #FFFFFF;
+      --text-muted: #888888;
+      --border: rgba(255, 255, 255, 0.1);
+      --gradient-1: linear-gradient(135deg, #FFFFFF, #666666);
+      --gradient-2: linear-gradient(135deg, #FFFFFF, #444444);
+      --gradient-3: linear-gradient(135deg, #999999, #FFFFFF);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: var(--primary-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent); }
+
+    /* ========== Animations ========== */
+    @keyframes float { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-12px); } }
+    @keyframes pulse-glow { 0%,100%{ opacity: 0.4; } 50%{ opacity: 0.8; } }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slide-in-left {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -20; }
+    }
+    @keyframes edge-particle {
+      0% { opacity: 0; offset-distance: 0%; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; offset-distance: 100%; }
+    }
+    .fade-up { animation: fade-up 0.7s ease-out both; }
+    .fade-up-d1 { animation-delay: 0.1s; }
+    .fade-up-d2 { animation-delay: 0.2s; }
+    .fade-up-d3 { animation-delay: 0.3s; }
+    .fade-up-d4 { animation-delay: 0.4s; }
+
+    /* ========== Layout ========== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 100px 0; position: relative; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+    .text-gradient {
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ========== Nav ========== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.4rem; font-weight: 800; color: var(--text);
+    }
+    .nav-logo svg { width: 32px; height: 32px; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-github {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 8px;
+      background: #fff; color: #000 !important;
+      font-weight: 600; font-size: 0.9rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-github:hover { background: #e0e0e0; transform: translateY(-1px); }
+    .nav-github svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ========== Hero ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,255,255,0.06), transparent),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(255,255,255,0.03), transparent);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    }
+    .hero .container { position: relative; z-index: 1; display: flex; align-items: center; gap: 48px; }
+    .hero-content { flex: 0 0 auto; max-width: 580px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      font-size: 0.85rem; font-weight: 500; color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: pulse-glow 2s infinite; }
+    .hero-title {
+      font-size: 3.8rem; font-weight: 900; line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem; color: var(--text-muted); line-height: 1.7;
+      margin-bottom: 36px; max-width: 560px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 10px;
+      font-weight: 600; font-size: 1rem;
+      cursor: pointer; border: none; transition: all 0.25s;
+    }
+    .btn-primary {
+      background: #fff; color: #000;
+      box-shadow: 0 4px 20px rgba(255,255,255,0.15);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(255,255,255,0.2); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.06); }
+
+    /* Hero Visual */
+    .hero-visual {
+      flex: 0 0 auto;
+      width: 420px;
+      max-height: 90vh;
+      opacity: 0.95;
+    }
+    .workflow-svg { width: 100%; }
+    .workflow-svg .wf-node {
+      fill: #0f0f0f; stroke: rgba(255,255,255,0.2); stroke-width: 1;
+      rx: 8; ry: 8;
+      filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
+      transition: stroke 0.3s;
+    }
+    .workflow-svg .wf-node-start {
+      fill: #0f0f0f; stroke: rgba(255,255,255,0.45); stroke-width: 1.2;
+      rx: 8; ry: 8;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.06));
+    }
+    .workflow-svg .wf-node-llm {
+      fill: #141414; stroke: rgba(255,255,255,0.35); stroke-width: 1.2;
+      rx: 8; ry: 8;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.04));
+    }
+    .workflow-svg .wf-node-output {
+      fill: #0f0f0f; stroke: rgba(255,255,255,0.35); stroke-width: 1.2;
+      rx: 8; ry: 8;
+    }
+    .workflow-svg .wf-icon {
+      fill: none; stroke: rgba(255,255,255,0.5); stroke-width: 1.2;
+    }
+    .workflow-svg .wf-icon-filled {
+      fill: rgba(255,255,255,0.5); stroke: none;
+    }
+    .workflow-svg .wf-label {
+      fill: rgba(255,255,255,0.9); font-size: 10.5px; font-weight: 600;
+      font-family: 'Inter', sans-serif; letter-spacing: 0.3px;
+    }
+    .workflow-svg .wf-sublabel {
+      fill: rgba(255,255,255,0.3); font-size: 7.5px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+    .workflow-svg .edge-line {
+      stroke: rgba(255,255,255,0.12); stroke-width: 1; stroke-dasharray: 4 3;
+      animation: dash-flow 1.5s linear infinite;
+    }
+    .workflow-svg .edge-line-active {
+      stroke: rgba(255,255,255,0.22); stroke-width: 1; stroke-dasharray: 4 3;
+      animation: dash-flow 1s linear infinite;
+    }
+    .workflow-svg .wf-status-done { fill: #4ade80; }
+    .workflow-svg .wf-status-running { fill: #facc15; animation: pulse-glow 1.5s infinite; }
+    .workflow-svg .wf-status-pending { fill: rgba(255,255,255,0.15); }
+    .workflow-svg .wf-port {
+      fill: #222; stroke: rgba(255,255,255,0.25); stroke-width: 0.8;
+    }
+    @media (max-width: 900px) {
+      .hero-visual { display: none; }
+      .hero-title { font-size: 2.6rem; }
+      .hero .container { flex-direction: column; }
+    }
+
+    /* ========== Features ========== */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+    .feature-card {
+      padding: 32px; border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: #fff;
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.06);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .feature-icon.mono { background: rgba(255,255,255,0.08); }
+    .feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+    /* ========== Nodes ========== */
+    .nodes-section { background: rgba(19,22,39,0.5); }
+    .node-categories { display: flex; flex-direction: column; gap: 40px; margin-top: 48px; }
+    .node-category { }
+    .node-category-title {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .node-category-title .emoji { font-size: 1.3rem; }
+    .node-chips { display: flex; flex-wrap: wrap; gap: 12px; }
+    .node-chip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      font-size: 0.9rem; font-weight: 500;
+      transition: all 0.25s;
+    }
+    .node-chip:hover {
+      border-color: #fff;
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .node-chip .chip-name { color: var(--text); font-family: var(--font-mono); font-size: 0.85rem; }
+    .node-chip .chip-desc { color: var(--text-muted); font-size: 0.82rem; }
+
+    /* ========== Architecture ========== */
+    .arch-diagram {
+      margin-top: 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 32px;
+      overflow-x: auto;
+    }
+    .arch-svg { width: 100%; max-width: 800px; margin: 0 auto; display: block; }
+    .arch-svg .arch-box {
+      fill: var(--bg-card-hover); rx: 12; ry: 12;
+      stroke: #fff; stroke-width: 1;
+    }
+    .arch-svg .arch-box-accent { stroke: #999; }
+    .arch-svg .arch-label { fill: var(--text); font-size: 13px; font-weight: 700; }
+    .arch-svg .arch-sublabel { fill: var(--text-muted); font-size: 11px; }
+    .arch-svg .arch-arrow {
+      stroke: #666; stroke-width: 1.5;
+      marker-end: url(#arrowhead);
+    }
+
+    /* ========== Tech Stack ========== */
+    .tech-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px; margin-top: 48px;
+    }
+    .tech-item {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px; border-radius: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      transition: all 0.25s;
+    }
+    .tech-item:hover { border-color: #fff; transform: translateY(-2px); }
+    .tech-item .tech-icon { font-size: 2rem; margin-bottom: 10px; }
+    .tech-item .tech-name { font-weight: 600; font-size: 0.9rem; }
+    .tech-item .tech-desc { color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; }
+
+    /* ========== Quick Start ========== */
+    .quickstart-section { }
+    .code-block {
+      background: #0D1117;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0;
+      margin-top: 48px;
+      overflow: hidden;
+    }
+    .code-tabs {
+      display: flex; border-bottom: 1px solid var(--border);
+    }
+    .code-tab {
+      padding: 12px 24px;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--text-muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .code-tab.active { color: #fff; border-bottom-color: #fff; }
+    .code-tab:hover { color: var(--text); }
+    .code-content { display: none; padding: 24px; }
+    .code-content.active { display: block; }
+    .code-content pre {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: #C9D1D9;
+      overflow-x: auto;
+    }
+    .code-content .comment { color: #8B949E; }
+    .code-content .cmd { color: #fff; }
+    .code-content .string { color: #A5D6FF; }
+    .code-content .highlight { color: #ccc; }
+
+    /* ========== CTA ========== */
+    .cta-section {
+      text-align: center;
+      background:
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,255,255,0.04), transparent);
+    }
+    .cta-section .section-title { margin-bottom: 24px; }
+    .cta-section .section-desc { margin: 0 auto 36px; text-align: center; }
+
+    /* ========== Footer ========== */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: #fff; }
+
+    /* ========== MCP Section ========== */
+    .mcp-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .mcp-grid { grid-template-columns: repeat(2, 1fr); } }
+    .mcp-card {
+      padding: 20px; border-radius: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      text-align: center; transition: all 0.25s;
+    }
+    .mcp-card:hover { border-color: #fff; }
+    .mcp-card .mcp-name { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .mcp-card .mcp-desc { color: var(--text-muted); font-size: 0.82rem; }
+
+    /* ========== Scrollbar ========== */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-card-hover); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+    /* ========== Stats ========== */
+    .stats-row {
+      display: flex; gap: 48px; margin-top: 48px; flex-wrap: wrap;
+    }
+    .stat-item { text-align: left; }
+    .stat-number {
+      font-size: 2.5rem; font-weight: 900;
+      background: var(--gradient-1);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+    .nodes-section { background: rgba(10,10,10,0.8); }
+  </style>
+</head>
+<body>
+
+<!-- ==================== Hero ==================== -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title fade-up fade-up-d1">
+        AI 驱动的<br><span class="text-gradient">SRE 工作流</span>自动化平台
+      </h1>
+      <p class="hero-subtitle fade-up fade-up-d2">
+        将告警响应、故障诊断与根因分析编排为可复用的 Workflow。<br>
+        从第一个 Workflow 开始，让告警响应快人一步。
+      </p>
+      <div class="hero-actions fade-up fade-up-d3">
+        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          开始试用
+        </a>
+      </div>
+    </div>
+    <!-- Hero Workflow Visual -->
+    <div class="hero-visual" aria-hidden="true">
+      <svg class="workflow-svg" viewBox="0 0 520 400">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ===== Edges (behind nodes) ===== -->
+        <!-- Start → data sources -->
+        <line class="edge-line-active" x1="260" y1="44" x2="68" y2="76"/>
+        <line class="edge-line-active" x1="260" y1="44" x2="164" y2="76"/>
+        <line class="edge-line-active" x1="260" y1="44" x2="260" y2="76"/>
+        <line class="edge-line-active" x1="260" y1="44" x2="356" y2="76"/>
+        <line class="edge-line-active" x1="260" y1="44" x2="452" y2="76"/>
+        <!-- data → analysis -->
+        <line class="edge-line-active" x1="68" y1="120" x2="120" y2="156"/>
+        <line class="edge-line-active" x1="164" y1="120" x2="140" y2="156"/>
+        <line class="edge-line" x1="260" y1="120" x2="180" y2="156"/>
+        <line class="edge-line" x1="260" y1="120" x2="310" y2="156"/>
+        <line class="edge-line" x1="356" y1="120" x2="330" y2="156"/>
+        <line class="edge-line" x1="452" y1="120" x2="350" y2="156"/>
+        <!-- analysis → process -->
+        <line class="edge-line" x1="130" y1="204" x2="110" y2="244"/>
+        <line class="edge-line" x1="160" y1="204" x2="260" y2="244"/>
+        <line class="edge-line" x1="320" y1="204" x2="260" y2="244"/>
+        <line class="edge-line" x1="350" y1="204" x2="410" y2="244"/>
+        <!-- process → output -->
+        <line class="edge-line" x1="110" y1="290" x2="260" y2="332"/>
+        <line class="edge-line" x1="260" y1="290" x2="260" y2="332"/>
+        <line class="edge-line" x1="410" y1="290" x2="260" y2="332"/>
+
+        <!-- ===== Animated particles ===== -->
+        <circle r="1.5" fill="#fff" opacity="0">
+          <animateMotion dur="2s" repeatCount="indefinite" path="M260,44 L68,76"/>
+          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="1.5" fill="#fff" opacity="0">
+          <animateMotion dur="1.5s" repeatCount="indefinite" path="M260,44 L260,76"/>
+          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="1.5" fill="#fff" opacity="0">
+          <animateMotion dur="2.2s" repeatCount="indefinite" path="M260,44 L452,76"/>
+          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="1.2" fill="#fff" opacity="0">
+          <animateMotion dur="2.8s" repeatCount="indefinite" path="M68,120 L120,156"/>
+          <animate attributeName="opacity" values="0;0.5;0.5;0" dur="2.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="1.2" fill="#fff" opacity="0">
+          <animateMotion dur="2.4s" repeatCount="indefinite" path="M164,120 L140,156"/>
+          <animate attributeName="opacity" values="0;0.5;0.5;0" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="1.2" fill="#fff" opacity="0">
+          <animateMotion dur="3s" repeatCount="indefinite" path="M160,204 L260,244"/>
+          <animate attributeName="opacity" values="0;0.4;0.4;0" dur="3s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- ===== Row 0: Start ===== -->
+        <g>
+          <rect class="wf-node-start" x="200" y="10" width="120" height="34"/>
+          <polygon class="wf-icon-filled" points="214,20 214,34 226,27"/>
+          <text class="wf-label" x="232" y="31">Start</text>
+          <circle class="wf-status-done" cx="308" cy="20" r="2.5"/>
+        </g>
+
+        <!-- ===== Row 1: Data Collection (5 nodes) ===== -->
+        <!-- Prometheus -->
+        <g>
+          <rect class="wf-node" x="24" y="76" width="88" height="44"/>
+          <text class="wf-label" x="68" y="95" text-anchor="middle">Prometheus</text>
+          <text class="wf-sublabel" x="68" y="112" text-anchor="middle">promql</text>
+          <circle class="wf-status-done" cx="102" cy="84" r="2.5"/>
+          <circle class="wf-port" cx="68" cy="76" r="2.5"/>
+        </g>
+        <!-- Loki -->
+        <g>
+          <rect class="wf-node" x="120" y="76" width="88" height="44"/>
+          <text class="wf-label" x="164" y="95" text-anchor="middle">Loki</text>
+          <text class="wf-sublabel" x="164" y="112" text-anchor="middle">logql</text>
+          <circle class="wf-status-done" cx="198" cy="84" r="2.5"/>
+          <circle class="wf-port" cx="164" cy="76" r="2.5"/>
+        </g>
+        <!-- Jaeger -->
+        <g>
+          <rect class="wf-node" x="216" y="76" width="88" height="44"/>
+          <text class="wf-label" x="260" y="95" text-anchor="middle">Jaeger</text>
+          <text class="wf-sublabel" x="260" y="112" text-anchor="middle">trace</text>
+          <circle class="wf-status-done" cx="294" cy="84" r="2.5"/>
+          <circle class="wf-port" cx="260" cy="76" r="2.5"/>
+        </g>
+        <!-- Kubernetes -->
+        <g>
+          <rect class="wf-node" x="312" y="76" width="88" height="44"/>
+          <text class="wf-label" x="356" y="95" text-anchor="middle">Kubernetes</text>
+          <text class="wf-sublabel" x="356" y="112" text-anchor="middle">pods/events</text>
+          <circle class="wf-status-done" cx="390" cy="84" r="2.5"/>
+          <circle class="wf-port" cx="356" cy="76" r="2.5"/>
+        </g>
+        <!-- SSH -->
+        <g>
+          <rect class="wf-node" x="408" y="76" width="88" height="44"/>
+          <text class="wf-label" x="452" y="95" text-anchor="middle">SSH</text>
+          <text class="wf-sublabel" x="452" y="112" text-anchor="middle">remote cmd</text>
+          <circle class="wf-status-done" cx="486" cy="84" r="2.5"/>
+          <circle class="wf-port" cx="452" cy="76" r="2.5"/>
+        </g>
+
+        <!-- ===== Row 2: Analysis ===== -->
+        <!-- LLM -->
+        <g>
+          <rect class="wf-node-llm" x="76" y="156" width="168" height="48"/>
+          <path class="wf-icon" d="M92,174 l3,-6 3,6 -6,-3 6,0z" fill="none" stroke-width="1.2"/>
+          <text class="wf-label" x="106" y="176">LLM</text>
+          <text class="wf-sublabel" x="92" y="196">gpt-4o / deepseek</text>
+          <circle class="wf-status-running" cx="232" cy="164" r="2.5"/>
+          <circle class="wf-port" cx="160" cy="156" r="2.5"/>
+        </g>
+        <!-- Condition -->
+        <g>
+          <rect class="wf-node" x="280" y="156" width="130" height="48"/>
+          <line class="wf-icon" x1="294" y1="172" x2="294" y2="192"/>
+          <line class="wf-icon" x1="294" y1="180" x2="302" y2="174"/>
+          <line class="wf-icon" x1="294" y1="180" x2="302" y2="186"/>
+          <text class="wf-label" x="310" y="180">Condition</text>
+          <text class="wf-sublabel" x="294" y="196">if / else</text>
+          <circle class="wf-status-pending" cx="398" cy="164" r="2.5"/>
+          <circle class="wf-port" cx="345" cy="156" r="2.5"/>
+        </g>
+
+        <!-- ===== Row 3: Processing ===== -->
+        <!-- GoScript -->
+        <g>
+          <rect class="wf-node" x="40" y="244" width="130" height="46"/>
+          <circle class="wf-icon" cx="56" cy="267" r="5"/>
+          <circle class="wf-icon" cx="56" cy="267" r="2"/>
+          <text class="wf-label" x="66" y="264">GoScript</text>
+          <text class="wf-sublabel" x="56" y="284">yaegi</text>
+          <circle class="wf-status-pending" cx="158" cy="252" r="2.5"/>
+          <circle class="wf-port" cx="110" cy="244" r="2.5"/>
+        </g>
+        <!-- MCP Tool -->
+        <g>
+          <rect class="wf-node" x="190" y="244" width="130" height="46"/>
+          <circle class="wf-icon" cx="206" cy="267" r="4"/>
+          <line class="wf-icon" x1="206" y1="263" x2="206" y2="271"/>
+          <line class="wf-icon" x1="202" y1="267" x2="210" y2="267"/>
+          <text class="wf-label" x="216" y="264">MCP Tool</text>
+          <text class="wf-sublabel" x="206" y="284">external</text>
+          <circle class="wf-status-pending" cx="308" cy="252" r="2.5"/>
+          <circle class="wf-port" cx="260" cy="244" r="2.5"/>
+        </g>
+        <!-- HTTP -->
+        <g>
+          <rect class="wf-node" x="340" y="244" width="130" height="46"/>
+          <line class="wf-icon" x1="354" y1="267" x2="372" y2="267"/>
+          <polyline class="wf-icon" points="368,263 372,267 368,271"/>
+          <text class="wf-label" x="378" y="264">HTTP</text>
+          <text class="wf-sublabel" x="354" y="284">webhook</text>
+          <circle class="wf-status-pending" cx="458" cy="252" r="2.5"/>
+          <circle class="wf-port" cx="410" cy="244" r="2.5"/>
+        </g>
+
+        <!-- ===== Row 4: Output ===== -->
+        <g>
+          <rect class="wf-node-output" x="190" y="332" width="140" height="38"/>
+          <circle class="wf-icon" cx="210" cy="351" r="6"/>
+          <polyline class="wf-icon" points="207,351 210,354 215,348" fill="none"/>
+          <text class="wf-label" x="222" y="355">Output</text>
+          <circle class="wf-status-pending" cx="318" cy="340" r="2.5"/>
+          <circle class="wf-port" cx="260" cy="332" r="2.5"/>
+        </g>
+
+        <!-- ===== Layer labels ===== -->
+        <text x="8" y="68" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">COLLECT</text>
+        <text x="8" y="150" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">ANALYZE</text>
+        <text x="8" y="238" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">PROCESS</text>
+        <text x="8" y="326" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">OUTPUT</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Hero 产品截图 -->
+<section style="padding: 40px 0 80px; text-align: center;">
+  <div class="container">
+    <img src="home.png" alt="SREFlow 产品界面" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
+  </div>
+</section>
+
+<!-- ==================== Features ==================== -->
+<section id="features">
+  <div class="container">
+    <span class="section-label">核心特性</span>
+    <h2 class="section-title">为 <span class="text-gradient">智能运维</span> 而生</h2>
+    <p class="section-desc">从告警触发到根因定位，SREFlow 让每一步都可编排、可观测、可复用。</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon mono">⚡</div>
+        <h3>可视化 Workflow 引擎</h3>
+        <p>基于 DAG 的层级执行模型，支持并发节点、条件分支、变量传递与重试策略，让复杂运维流程一目了然。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🧩</div>
+        <h3>丰富的内置节点</h3>
+        <p>覆盖数据采集、AI 分析、逻辑处理与输出四大类别，开箱即用，也支持自定义扩展。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🔌</div>
+        <h3>MCP Server</h3>
+        <p>内置 Model Context Protocol 服务端，LLM Agent 可直接调用编排工作流，实现 AI 原生集成。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🏢</div>
+        <h3>多租户 Workspace</h3>
+        <p>工作空间级别的资源隔离，集成与工作流按空间管理，满足多团队协作需求。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🕸️</div>
+        <h3>拓扑管理</h3>
+        <p>可视化定义服务拓扑关系，供 Workflow 节点引用，实现基于拓扑的智能故障定位。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🔗</div>
+        <h3>多数据源集成</h3>
+        <p>Prometheus、Jaeger、Loki、Elasticsearch、ClickHouse、Kubernetes、SSH 开箱即用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Workflow 可视化截图 -->
+<section style="padding: 60px 0 100px; text-align: center;">
+  <div class="container">
+    <span class="section-label">Workflow 编辑器</span>
+    <h2 class="section-title">拖拽编排，<span class="text-gradient">所见即所得</span></h2>
+    <p class="section-desc" style="margin: 0 auto 36px;">可视化构建告警响应流程，DAG 拓扑实时渲染。</p>
+    <img src="sre-workflow.png" alt="SREFlow Workflow 编辑器" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
+  </div>
+</section>
+
+<!-- ==================== Node Types ==================== -->
+<section id="nodes" class="nodes-section">
+  <div class="container">
+    <span class="section-label">内置节点</span>
+    <h2 class="section-title">四大类别，<span class="text-gradient">16+ 节点</span></h2>
+    <p class="section-desc">从数据采集到智能分析，从逻辑判断到结果输出，覆盖 SRE 全场景。</p>
+
+    <div class="node-categories">
+      <div class="node-category">
+        <div class="node-category-title"><span class="emoji">📥</span> 数据采集</div>
+        <div class="node-chips">
+          <div class="node-chip"><span class="chip-name">prometheus</span><span class="chip-desc">PromQL 查询</span></div>
+          <div class="node-chip"><span class="chip-name">jaeger</span><span class="chip-desc">链路追踪</span></div>
+          <div class="node-chip"><span class="chip-name">loki</span><span class="chip-desc">日志查询</span></div>
+          <div class="node-chip"><span class="chip-name">elasticsearch</span><span class="chip-desc">全文检索</span></div>
+          <div class="node-chip"><span class="chip-name">clickhouse</span><span class="chip-desc">SQL 查询</span></div>
+          <div class="node-chip"><span class="chip-name">kubernetes</span><span class="chip-desc">K8s 资源查询</span></div>
+          <div class="node-chip"><span class="chip-name">ssh</span><span class="chip-desc">远程命令</span></div>
+          <div class="node-chip"><span class="chip-name">topology</span><span class="chip-desc">拓扑关系</span></div>
+        </div>
+      </div>
+      <div class="node-category">
+        <div class="node-category-title"><span class="emoji">🧠</span> 处理分析</div>
+        <div class="node-chips">
+          <div class="node-chip"><span class="chip-name">llm</span><span class="chip-desc">大模型推理</span></div>
+          <div class="node-chip"><span class="chip-name">condition</span><span class="chip-desc">条件分支</span></div>
+          <div class="node-chip"><span class="chip-name">goscript</span><span class="chip-desc">Go 脚本</span></div>
+          <div class="node-chip"><span class="chip-name">mcptool</span><span class="chip-desc">MCP 工具</span></div>
+        </div>
+      </div>
+      <div class="node-category">
+        <div class="node-category-title"><span class="emoji">📤</span> 输入输出</div>
+        <div class="node-chips">
+          <div class="node-chip"><span class="chip-name">start</span><span class="chip-desc">工作流入口</span></div>
+          <div class="node-chip"><span class="chip-name">output</span><span class="chip-desc">结果输出</span></div>
+          <div class="node-chip"><span class="chip-name">http</span><span class="chip-desc">HTTP 请求</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 工作流列表截图 -->
+<section style="padding: 60px 0 100px; text-align: center;">
+  <div class="container">
+    <span class="section-label">工作流管理</span>
+    <h2 class="section-title">统一管理，<span class="text-gradient">一键复用</span></h2>
+    <p class="section-desc" style="margin: 0 auto 36px;">工作空间级别的工作流管理，支持模板化复用与版本追踪。</p>
+    <img src="workflows.png" alt="SREFlow 工作流列表" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
+  </div>
+</section>
+
+<!-- ==================== Architecture ==================== -->
+<section id="architecture">
+  <div class="container">
+    <span class="section-label">架构设计</span>
+    <h2 class="section-title">分层架构，<span class="text-gradient">职责清晰</span></h2>
+    <p class="section-desc">从前端控制台到工作流引擎，每一层独立演进。</p>
+
+    <div class="arch-diagram">
+      <svg class="arch-svg" viewBox="0 0 800 420">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+          </marker>
+        </defs>
+
+        <!-- Web Console -->
+        <rect class="arch-box" x="20" y="20" width="200" height="80"/>
+        <text class="arch-label" x="120" y="52" text-anchor="middle">Web Console</text>
+        <text class="arch-sublabel" x="120" y="72" text-anchor="middle">Next.js + React Flow</text>
+
+        <!-- API Server -->
+        <rect class="arch-box" x="300" y="20" width="200" height="80"/>
+        <text class="arch-label" x="400" y="52" text-anchor="middle">API Server</text>
+        <text class="arch-sublabel" x="400" y="72" text-anchor="middle">Gin + GORM</text>
+
+        <!-- Workflow Engine -->
+        <rect class="arch-box arch-box-accent" x="580" y="20" width="200" height="80"/>
+        <text class="arch-label" x="680" y="52" text-anchor="middle">Workflow Engine</text>
+        <text class="arch-sublabel" x="680" y="72" text-anchor="middle">DAG Executor</text>
+
+        <!-- Integrations -->
+        <rect class="arch-box" x="200" y="180" width="200" height="80"/>
+        <text class="arch-label" x="300" y="212" text-anchor="middle">Integrations</text>
+        <text class="arch-sublabel" x="300" y="232" text-anchor="middle">MySQL / Redis / SQLite</text>
+
+        <!-- MCP Server -->
+        <rect class="arch-box arch-box-accent" x="480" y="180" width="200" height="80"/>
+        <text class="arch-label" x="580" y="212" text-anchor="middle">MCP Server</text>
+        <text class="arch-sublabel" x="580" y="232" text-anchor="middle">SSE / StreamableHTTP</text>
+
+        <!-- Node Implementations -->
+        <rect class="arch-box" x="100" y="320" width="600" height="80"/>
+        <text class="arch-label" x="400" y="352" text-anchor="middle">Node Implementations</text>
+        <text class="arch-sublabel" x="400" y="372" text-anchor="middle">Prometheus · Loki · Jaeger · ES · ClickHouse · K8s · SSH · LLM · GoScript · Condition · MCP · HTTP</text>
+
+        <!-- Arrows -->
+        <line class="arch-arrow" x1="220" y1="60" x2="300" y2="60"/>
+        <line class="arch-arrow" x1="500" y1="60" x2="580" y2="60"/>
+        <line class="arch-arrow" x1="400" y1="100" x2="300" y2="180"/>
+        <line class="arch-arrow" x1="680" y1="100" x2="580" y2="180"/>
+        <line class="arch-arrow" x1="680" y1="100" x2="400" y2="320"/>
+        <line class="arch-arrow" x1="300" y1="260" x2="350" y2="320"/>
+        <line class="arch-arrow" x1="580" y1="260" x2="500" y2="320"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 集成截图 -->
+<section style="padding: 60px 0 100px; text-align: center;">
+  <div class="container">
+    <span class="section-label">数据源集成</span>
+    <h2 class="section-title">开箱即用，<span class="text-gradient">无缝对接</span></h2>
+    <p class="section-desc" style="margin: 0 auto 36px;">Prometheus、Loki、Jaeger、Kubernetes 等主流数据源一键接入。</p>
+    <img src="integrations.png" alt="SREFlow 数据源集成" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
+  </div>
+</section>
+
+<!-- ==================== MCP ==================== -->
+<section id="mcp">
+  <div class="container">
+    <span class="section-label">MCP 集成</span>
+    <h2 class="section-title"><span class="text-gradient">AI 原生</span>工作流编排</h2>
+    <p class="section-desc">通过 MCP 协议，LLM Agent 可直接调用 SREFlow 的工作流能力。</p>
+
+    <div class="mcp-grid">
+      <div class="mcp-card">
+        <div class="mcp-name">workflow_list</div>
+        <div class="mcp-desc">列出工作空间下所有工作流</div>
+      </div>
+      <div class="mcp-card">
+        <div class="mcp-name">workflow_execute</div>
+        <div class="mcp-desc">执行指定工作流</div>
+      </div>
+      <div class="mcp-card">
+        <div class="mcp-name">workflow_status</div>
+        <div class="mcp-desc">查询执行状态</div>
+      </div>
+      <div class="mcp-card">
+        <div class="mcp-name">workflow_result</div>
+        <div class="mcp-desc">获取执行结果</div>
+      </div>
+    </div>
+    <img src="mcp.png" alt="SREFlow MCP 集成" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border); margin-top: 36px;">
+  </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-title">准备好 <span class="text-gradient">重新定义</span> 你的 SRE 工作流了吗？</h2>
+    <p class="section-desc">从第一个 Workflow 开始，让告警响应快人一步。</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-outline">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        开始试用
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== Footer ==================== -->
+<footer>
+  <div class="container">
+    <p>SREFlow &mdash; AI 驱动的 SRE 工作流自动化平台</p>
+  </div>
+</footer>
+
+<!-- ==================== Script ==================== -->
+<script>
+function switchTab(e, tabId) {
+  document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.code-content').forEach(c => c.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// Intersection Observer for fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animation = 'fade-up 0.6s ease-out both';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .node-chip, .tech-item, .mcp-card').forEach(el => {
+  el.style.opacity = '0';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
