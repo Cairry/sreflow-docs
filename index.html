@@ -108,8 +108,8 @@
       font-size: 1.4rem; font-weight: 800; color: var(--text);
     }
     .nav-logo svg { width: 32px; height: 32px; }
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
     .nav-github {
       display: flex; align-items: center; gap: 6px;
@@ -424,6 +424,160 @@
     }
     .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
     .nodes-section { background: rgba(10,10,10,0.8); }
+
+    /* ========== Copy Button ========== */
+    .copy-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); padding: 4px 8px; border-radius: 6px;
+      transition: all 0.2s; display: flex; align-items: center;
+    }
+    .copy-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .copy-btn.copied { color: #4ade80; }
+
+    /* ========== Pain Points ========== */
+    .pain-section { background: rgba(5,5,5,0.9); }
+    .pain-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .pain-grid { grid-template-columns: 1fr; } }
+    .pain-card {
+      padding: 32px; border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 80, 80, 0.15);
+      transition: all 0.3s;
+    }
+    .pain-card:hover {
+      border-color: rgba(255, 80, 80, 0.4);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+    .pain-card .pain-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(255, 80, 80, 0.1);
+      color: #ff6b6b; font-weight: 800; font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    .pain-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: #ff8a8a; }
+    .pain-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; }
+    .pain-card .pain-highlight {
+      display: block; margin-top: 14px; padding: 12px 16px;
+      border-radius: 8px; background: rgba(255, 80, 80, 0.06);
+      border-left: 3px solid rgba(255, 80, 80, 0.4);
+      font-size: 0.88rem; color: #ffb3b3; line-height: 1.6;
+    }
+
+    /* ========== Comparison ========== */
+    .compare-section { }
+    .compare-wrapper {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 32px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .compare-wrapper { grid-template-columns: 1fr; } }
+    .compare-card {
+      padding: 36px; border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .compare-card:hover {
+      transform: translateY(-4px);
+    }
+    .compare-card.bad {
+      border-color: rgba(255, 80, 80, 0.2);
+    }
+    .compare-card.bad:hover {
+      border-color: rgba(255, 80, 80, 0.4);
+    }
+    .compare-card.good {
+      border-color: rgba(74, 222, 128, 0.2);
+    }
+    .compare-card.good:hover {
+      border-color: rgba(74, 222, 128, 0.4);
+      box-shadow: 0 8px 30px rgba(74, 222, 128, 0.06);
+    }
+    .compare-label {
+      display: inline-block; padding: 4px 14px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+    .compare-card.bad .compare-label {
+      background: rgba(255, 80, 80, 0.1); color: #ff6b6b;
+    }
+    .compare-card.good .compare-label {
+      background: rgba(74, 222, 128, 0.1); color: #4ade80;
+    }
+    .compare-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .compare-card .compare-subtitle { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px; }
+    .compare-card .compare-flow {
+      padding: 16px 20px; border-radius: 10px;
+      font-family: var(--font-mono); font-size: 0.82rem; line-height: 2;
+      margin-bottom: 20px;
+    }
+    .compare-card.bad .compare-flow {
+      background: rgba(255, 80, 80, 0.04);
+      border: 1px solid rgba(255, 80, 80, 0.1);
+    }
+    .compare-card.good .compare-flow {
+      background: rgba(74, 222, 128, 0.04);
+      border: 1px solid rgba(74, 222, 128, 0.1);
+    }
+    .compare-card .compare-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 500;
+      margin-right: 8px; margin-bottom: 8px;
+    }
+    .compare-card.bad .compare-tag {
+      background: rgba(255, 80, 80, 0.08); color: #ff8a8a;
+    }
+    .compare-card.good .compare-tag {
+      background: rgba(74, 222, 128, 0.08); color: #4ade80;
+    }
+
+    /* ========== Solution Table ========== */
+    .solution-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      margin-top: 48px; border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .solution-table th {
+      padding: 16px 24px; text-align: left;
+      background: rgba(255,255,255,0.04); font-weight: 700; font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .solution-table td {
+      padding: 16px 24px; font-size: 0.9rem; line-height: 1.6;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .solution-table tr:last-child td { border-bottom: none; }
+    .solution-table td:first-child {
+      color: #ff8a8a; font-weight: 600; width: 28%;
+    }
+    .solution-table td:nth-child(2) {
+      width: 5%; text-align: center; font-size: 1.1rem;
+    }
+    .solution-table td:last-child {
+      color: #4ade80; font-weight: 500;
+    }
+
+    /* ========== Core Message ========== */
+    .core-message {
+      margin-top: 48px; padding: 40px;
+      border-radius: 16px; text-align: center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+    }
+    .core-message p {
+      font-size: 1.25rem; font-weight: 600; line-height: 1.8;
+      max-width: 700px; margin: 0 auto;
+    }
+    .core-message .msg-highlight {
+      background: var(--gradient-1);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
   </style>
 </head>
 <body>
@@ -441,9 +595,13 @@
         从第一个 Workflow 开始，让告警响应快人一步。
       </p>
       <div class="hero-actions fade-up fade-up-d3">
-        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-primary">
+        <a href="#quickstart" class="btn btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          申请试用
+          快速开始
+        </a>
+        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-outline">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          意见反馈
         </a>
       </div>
     </div>
@@ -636,6 +794,128 @@
 <section style="padding: 40px 0 80px; text-align: center;">
   <div class="container">
     <img src="home.png" alt="SREFlow 产品界面" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
+  </div>
+</section>
+
+<!-- ==================== Pain Points ==================== -->
+<section id="pain-points" class="pain-section">
+  <div class="container">
+    <span class="section-label">行业困境</span>
+    <h2 class="section-title">SRE 的痛，<span class="text-gradient">谁懂？</span></h2>
+    <p class="section-desc">告警风暴、胶水脚本、黑盒推理……SRE 的日常远比想象中艰难。</p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-number">1</div>
+        <h3>自动化工具链碎片化</h3>
+        <p>日常运维仍大量依赖 Bash 脚本 + Prometheus 告警 + YAML 配置手动拼接，缺乏统一编排层。</p>
+        <span class="pain-highlight">每新增一个运维场景，就要从头写脚本、接 API、处理异常——重复造轮子、维护成本高、可复用性极差。</span>
+      </div>
+      <div class="pain-card">
+        <div class="pain-number">2</div>
+        <h3>通用工作流引擎"能凑合但不够用"</h3>
+        <p>像 n8n 这类可视化工具虽能串联简单链路，但在 SRE 场景下存在明显短板。</p>
+        <span class="pain-highlight">缺乏 SRE 领域语义，复杂度天花板低，一旦涉及多条件分支、上下文传递，维护难度急剧上升，无法胜任 AIOps 级自动化。</span>
+      </div>
+      <div class="pain-card">
+        <div class="pain-number">3</div>
+        <h3>LLM Agent 懂推理，但不了解业务</h3>
+        <p>当前市面上的 SRE Agent 普遍采用 LLM 推理 + Tool Calling 模式，但大模型并不了解你的架构与业务。</p>
+        <span class="pain-highlight">同一个告警，不同时间可能走完全不同的分析路径，无法沉淀为标准化流程；缺乏"老手直觉"，广撒网式排查而非精准定位。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== Comparison ==================== -->
+<section id="comparison" class="compare-section">
+  <div class="container">
+    <span class="section-label">核心差异</span>
+    <h2 class="section-title">不是让 AI 去"猜"，<span class="text-gradient">而是让经验可复现</span></h2>
+    <p class="section-desc">传统 SRE Agent 依赖大模型"凭空推理"，SREFlow 让资深经验以流程化方式被编码和执行。</p>
+
+    <div class="compare-wrapper">
+      <div class="compare-card bad">
+        <span class="compare-label">❌ 传统 SRE Agent</span>
+        <h3>LLM 推理 + Tool Calling</h3>
+        <p class="compare-subtitle">黑盒 · 不可控 · 不可复现</p>
+        <div class="compare-flow">
+          <span style="color:#ff8a8a;">告警</span> → LLM 推理 → 调用工具 A/B/C → 给出结论<br>
+          <span style="color:rgba(255,255,255,0.3);">// 不了解架构，广撒网式排查</span>
+        </div>
+        <div>
+          <span class="compare-tag">⚠ 不了解架构</span>
+          <span class="compare-tag">⚠ 不了解业务</span>
+          <span class="compare-tag">⚠ 路径不可复现</span>
+          <span class="compare-tag">⚠ 知识无法沉淀</span>
+        </div>
+      </div>
+      <div class="compare-card good">
+        <span class="compare-label">✅ SREFlow</span>
+        <h3>流程化诊断 + 架构感知</h3>
+        <p class="compare-subtitle">白盒 · 可控 · 可复现</p>
+        <div class="compare-flow">
+          <span style="color:#4ade80;">告警</span> → 匹配诊断流程 → 按架构感知路径逐步排查 → 定位根因<br>
+          <span style="color:rgba(255,255,255,0.3);">// 像老手一样，知道"先查什么再查什么"</span>
+        </div>
+        <div>
+          <span class="compare-tag">✓ 架构感知</span>
+          <span class="compare-tag">✓ 业务上下文</span>
+          <span class="compare-tag">✓ 路径可审计</span>
+          <span class="compare-tag">✓ 经验可复用</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== Solution Table ==================== -->
+<section id="solution" class="nodes-section">
+  <div class="container">
+    <span class="section-label">解法对照</span>
+    <h2 class="section-title">困境 → <span class="text-gradient">SREFlow 解法</span></h2>
+    <p class="section-desc">每一项 SRE 痛点，SREFlow 都给出了对应的答案。</p>
+
+    <table class="solution-table">
+      <thead>
+        <tr>
+          <th>困境</th>
+          <th></th>
+          <th>SREFlow 解法</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>胶水脚本碎片化</td>
+          <td>→</td>
+          <td>标准化 Workflow 引擎，将排障、诊断、修复抽象为结构化 Flow，而非零散脚本</td>
+        </tr>
+        <tr>
+          <td>通用工作流缺乏 SRE 语义</td>
+          <td>→</td>
+          <td>SRE 领域原生，内置故障诊断、根因分析、爆炸半径评估等 SRE 概念，而非通用 IF/ELSE 节点</td>
+        </tr>
+        <tr>
+          <td>LLM Agent 不了解业务/架构</td>
+          <td>→</td>
+          <td>基于规范化流程排障，告警进来后按预设的架构感知路径逐步诊断，如同老手的思维链路</td>
+        </tr>
+        <tr>
+          <td>推理路径不可控不可复现</td>
+          <td>→</td>
+          <td>确定性 + 可审计，每一步排查逻辑清晰可见，路径可复现、可审计、可迭代优化</td>
+        </tr>
+        <tr>
+          <td>无法沉淀组织知识</td>
+          <td>→</td>
+          <td>流程即知识资产，排障流程本身就是团队经验的沉淀，新成员可直接复用</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="core-message">
+      <p>SREFlow 不让 AI 去"猜"问题在哪，<br>而是让资深 SRE 的排障经验以<span class="msg-highlight">流程化</span>的方式被编码和执行——<br><span class="msg-highlight">把"老手的直觉"变成"可复现的流程"</span>。</p>
+    </div>
   </div>
 </section>
 
@@ -840,6 +1120,101 @@
   </div>
 </section>
 
+<!-- ==================== Quick Start ==================== -->
+<section id="quickstart" class="nodes-section">
+  <div class="container">
+    <span class="section-label">快速开始</span>
+    <h2 class="section-title"><span class="text-gradient">一行命令</span>，即刻启动</h2>
+    <p class="section-desc">使用 Docker 快速部署 SREFlow，只需三步即可开始使用。</p>
+
+    <div style="margin-top:48px;display:grid;gap:24px;">
+      <!-- Step 1 -->
+      <div style="display:flex;gap:20px;align-items:flex-start;">
+        <div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">1</div>
+        <div style="flex:1;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">准备配置文件</h3>
+          <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:16px;">在宿主机创建 <code style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;font-size:0.85rem;">./config/</code> 目录，包含 <code style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;font-size:0.85rem;">config.yaml</code> 和 <code style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;font-size:0.85rem;">license.lic</code> 两个文件。</p>
+          <div class="code-block" style="margin-top:0;">
+            <div style="padding:4px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-mono);font-size:0.82rem;color:var(--text-muted);">config/config.yaml</span>
+              <button class="copy-btn" onclick="copyCode(this)" title="复制">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <div style="padding:20px 24px;">
+              <pre style="font-family:var(--font-mono);font-size:0.88rem;line-height:1.8;color:#C9D1D9;"><span class="comment"># SREFlow 配置文件</span>
+<span class="cmd">Server:</span>
+  <span class="highlight">mode:</span> <span class="string">"release"</span>
+  <span class="highlight">port:</span> <span class="string">"9001"</span>
+
+<span class="cmd">Database:</span>
+  <span class="highlight">type:</span> <span class="string">"sqlite"</span>
+  <span class="highlight">path:</span> <span class="string">"data/sreflow.db"</span>
+
+<span class="cmd">License:</span>
+  <span class="highlight">path:</span> <span class="string">"config/license.lic"</span></pre>
+            </div>
+          </div>
+          
+          <hr style="border:0;border-top:1px solid var(--border);margin:24px 0;">
+
+          <div class="code-block" style="margin-top:0;">
+            <div style="padding:4px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-mono);font-size:0.82rem;color:var(--text-muted);">config/license.lic</span>
+              <button class="copy-btn" onclick="copyCode(this)" title="复制">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <div style="padding:20px 24px;">
+<pre style="font-family:var(--font-mono);font-size:0.88rem;line-height:1.8;color:#C9D1D9;white-space:pre-wrap;word-break:break-all;"><span class="comment"># SREFlow License 文件, 有效期30天</span>
+{
+  <span class="highlight">"payload"</span>: <span class="string">"eyJob2xkZXIiOiJ0ZXN0IiwiaXNzdWVkX2F0IjoxNzc5OTgxNzM2LCJleHBpcmVzX2F0IjoxNzgyNTczNzM2fQ=="</span>,
+  <span class="highlight">"signature"</span>: <span class="string">"R2eHiX+WefipV4O/kWhATKOgQI6t1bP8Sh1bv81aey5mf2OCr45lbu35tWDuWy3iZx+Gz/hDmIY0QpO1oNsIwYZkRqNsgQSvyTGLSFn0M/P3XQb3CsymlOi7gS4yT5hZ3Dz4DTSs9VGV+Tm/j6IZdV7oyImaO3eY6uOq6y3soXSWBcpKdnxk0I5XQLz1mpbvDrbAXbnHuIuvKTGmG4hb+tKnVy12pyXIshtUDnpFvgMOwAx4jdM9x7Erydlz7rKWZaM82jNfcushYgpf//TjwiNWY9IUn2fxaXUadT25jucMKTR+KtAvAyP6huWThIrfNwE+jCCQwvDceGvdIwiXsg=="</span>,
+  <span class="highlight">"public_key"</span>: <span class="string">"LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFreGM5ZHU4eldIbmFsSm1VSVU5TAp2bk8rczVuVmp4RVY2M3RSRE5jWE5ldEJyc2NwQmphTUJnNjRBYUVsaGxyd0cvY3JDZEhnOEwxRzNFaDNSVHl0CjEzVkVabWhialYzY3pKRnFsZDcxU3hCSDFQa0RKUmF4YzhRVUMwS2NTUmtwRjJsSE1ZMDRud3VXRG5Ua256SUcKd25YcXUwN3FyaDVkbWRUOWU3SFFmMEVtN2ZJcXZVTFRhdkVWRDlZQW1pKzlKVjF1UXU1aDdQdkpXZXpxbzRaNwpFVkhZSVR6clYvUUhsUnNCbWZqK3pDbE12S01uSVM5N0Y4dDFGenIwNjVDbW9ia1BjYXY5WEhyL3p1VjNqYTA3Cm05KzFLSHV5MzlrRjdiRzduaytJNlBXaTNpbkVwa3BxMTdUSStNT0VONTBCS2RKdHc3aGlOYVUwMWN5QzIrWG8KdVFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="</span>
+}
+</pre>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="display:flex;gap:20px;align-items:flex-start;">
+        <div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">2</div>
+        <div style="flex:1;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">启动服务</h3>
+          <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:16px;">运行以下命令，启动 SREFlow 容器服务。</p>
+          <div class="code-block" style="margin-top:0;">
+            <div style="padding:4px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-mono);font-size:0.82rem;color:var(--text-muted);">Terminal</span>
+              <button class="copy-btn" onclick="copyCode(this)" title="复制">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <div style="padding:20px 24px;">
+              <pre style="font-family:var(--font-mono);font-size:0.88rem;line-height:1.8;color:#C9D1D9;"><span class="cmd">docker run -itd --name sreflow \</span>
+  <span class="cmd">-p 8080:8080 \</span>
+  <span class="cmd">-v ./config/:/app/config/ \</span>
+  <span class="cmd">docker.1ms.run/cairry/sreflow:v1.0.1</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="display:flex;gap:20px;align-items:flex-start;">
+        <div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;">3</div>
+        <div style="flex:1;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">访问服务</h3>
+          <p style="color:var(--text-muted);font-size:0.92rem;">启动完成后，访问 <code style="font-family:var(--font-mono);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:4px;font-size:0.85rem;">http://localhost:8080</code> 即可使用 SREFlow。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ==================== CTA ==================== -->
 <section class="cta-section">
   <div class="container">
@@ -847,8 +1222,8 @@
     <p class="section-desc">从第一个 Workflow 开始，让告警响应快人一步。</p>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
       <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-outline">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
-        申请试用
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        意见反馈
       </a>
     </div>
   </div>
@@ -870,6 +1245,20 @@ function switchTab(e, tabId) {
   document.getElementById(tabId).classList.add('active');
 }
 
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    const svg = btn.innerHTML;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = svg;
+    }, 2000);
+  });
+}
+
 // Intersection Observer for fade-in
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -880,7 +1269,7 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.feature-card, .node-chip, .tech-item, .mcp-card').forEach(el => {
+document.querySelectorAll('.feature-card, .node-chip, .tech-item, .mcp-card, .pain-card, .compare-card, .core-message').forEach(el => {
   el.style.opacity = '0';
   observer.observe(el);
 });
