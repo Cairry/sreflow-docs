@@ -607,193 +607,8 @@
     </div>
     <!-- Hero Workflow Visual -->
     <div class="hero-visual" aria-hidden="true">
-      <svg class="workflow-svg" viewBox="0 0 520 400">
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- ===== Edges (behind nodes) ===== -->
-        <!-- Start → data sources -->
-        <line class="edge-line-active" x1="260" y1="44" x2="68" y2="76"/>
-        <line class="edge-line-active" x1="260" y1="44" x2="164" y2="76"/>
-        <line class="edge-line-active" x1="260" y1="44" x2="260" y2="76"/>
-        <line class="edge-line-active" x1="260" y1="44" x2="356" y2="76"/>
-        <line class="edge-line-active" x1="260" y1="44" x2="452" y2="76"/>
-        <!-- data → analysis -->
-        <line class="edge-line-active" x1="68" y1="120" x2="120" y2="156"/>
-        <line class="edge-line-active" x1="164" y1="120" x2="140" y2="156"/>
-        <line class="edge-line" x1="260" y1="120" x2="180" y2="156"/>
-        <line class="edge-line" x1="260" y1="120" x2="310" y2="156"/>
-        <line class="edge-line" x1="356" y1="120" x2="330" y2="156"/>
-        <line class="edge-line" x1="452" y1="120" x2="350" y2="156"/>
-        <!-- analysis → process -->
-        <line class="edge-line" x1="130" y1="204" x2="110" y2="244"/>
-        <line class="edge-line" x1="160" y1="204" x2="260" y2="244"/>
-        <line class="edge-line" x1="320" y1="204" x2="260" y2="244"/>
-        <line class="edge-line" x1="350" y1="204" x2="410" y2="244"/>
-        <!-- process → output -->
-        <line class="edge-line" x1="110" y1="290" x2="260" y2="332"/>
-        <line class="edge-line" x1="260" y1="290" x2="260" y2="332"/>
-        <line class="edge-line" x1="410" y1="290" x2="260" y2="332"/>
-
-        <!-- ===== Animated particles ===== -->
-        <circle r="1.5" fill="#fff" opacity="0">
-          <animateMotion dur="2s" repeatCount="indefinite" path="M260,44 L68,76"/>
-          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="1.5" fill="#fff" opacity="0">
-          <animateMotion dur="1.5s" repeatCount="indefinite" path="M260,44 L260,76"/>
-          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="1.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="1.5" fill="#fff" opacity="0">
-          <animateMotion dur="2.2s" repeatCount="indefinite" path="M260,44 L452,76"/>
-          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="2.2s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="1.2" fill="#fff" opacity="0">
-          <animateMotion dur="2.8s" repeatCount="indefinite" path="M68,120 L120,156"/>
-          <animate attributeName="opacity" values="0;0.5;0.5;0" dur="2.8s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="1.2" fill="#fff" opacity="0">
-          <animateMotion dur="2.4s" repeatCount="indefinite" path="M164,120 L140,156"/>
-          <animate attributeName="opacity" values="0;0.5;0.5;0" dur="2.4s" repeatCount="indefinite"/>
-        </circle>
-        <circle r="1.2" fill="#fff" opacity="0">
-          <animateMotion dur="3s" repeatCount="indefinite" path="M160,204 L260,244"/>
-          <animate attributeName="opacity" values="0;0.4;0.4;0" dur="3s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- ===== Row 0: Start ===== -->
-        <g>
-          <rect class="wf-node-start" x="200" y="10" width="120" height="34"/>
-          <polygon class="wf-icon-filled" points="214,20 214,34 226,27"/>
-          <text class="wf-label" x="232" y="31">Start</text>
-          <circle class="wf-status-done" cx="308" cy="20" r="2.5"/>
-        </g>
-
-        <!-- ===== Row 1: Data Collection (5 nodes) ===== -->
-        <!-- Prometheus -->
-        <g>
-          <rect class="wf-node" x="24" y="76" width="88" height="44"/>
-          <text class="wf-label" x="68" y="95" text-anchor="middle">Prometheus</text>
-          <text class="wf-sublabel" x="68" y="112" text-anchor="middle">promql</text>
-          <circle class="wf-status-done" cx="102" cy="84" r="2.5"/>
-          <circle class="wf-port" cx="68" cy="76" r="2.5"/>
-        </g>
-        <!-- Loki -->
-        <g>
-          <rect class="wf-node" x="120" y="76" width="88" height="44"/>
-          <text class="wf-label" x="164" y="95" text-anchor="middle">Loki</text>
-          <text class="wf-sublabel" x="164" y="112" text-anchor="middle">logql</text>
-          <circle class="wf-status-done" cx="198" cy="84" r="2.5"/>
-          <circle class="wf-port" cx="164" cy="76" r="2.5"/>
-        </g>
-        <!-- Jaeger -->
-        <g>
-          <rect class="wf-node" x="216" y="76" width="88" height="44"/>
-          <text class="wf-label" x="260" y="95" text-anchor="middle">Jaeger</text>
-          <text class="wf-sublabel" x="260" y="112" text-anchor="middle">trace</text>
-          <circle class="wf-status-done" cx="294" cy="84" r="2.5"/>
-          <circle class="wf-port" cx="260" cy="76" r="2.5"/>
-        </g>
-        <!-- Kubernetes -->
-        <g>
-          <rect class="wf-node" x="312" y="76" width="88" height="44"/>
-          <text class="wf-label" x="356" y="95" text-anchor="middle">Kubernetes</text>
-          <text class="wf-sublabel" x="356" y="112" text-anchor="middle">pods/events</text>
-          <circle class="wf-status-done" cx="390" cy="84" r="2.5"/>
-          <circle class="wf-port" cx="356" cy="76" r="2.5"/>
-        </g>
-        <!-- SSH -->
-        <g>
-          <rect class="wf-node" x="408" y="76" width="88" height="44"/>
-          <text class="wf-label" x="452" y="95" text-anchor="middle">SSH</text>
-          <text class="wf-sublabel" x="452" y="112" text-anchor="middle">remote cmd</text>
-          <circle class="wf-status-done" cx="486" cy="84" r="2.5"/>
-          <circle class="wf-port" cx="452" cy="76" r="2.5"/>
-        </g>
-
-        <!-- ===== Row 2: Analysis ===== -->
-        <!-- LLM -->
-        <g>
-          <rect class="wf-node-llm" x="76" y="156" width="168" height="48"/>
-          <path class="wf-icon" d="M92,174 l3,-6 3,6 -6,-3 6,0z" fill="none" stroke-width="1.2"/>
-          <text class="wf-label" x="106" y="176">LLM</text>
-          <text class="wf-sublabel" x="92" y="196">gpt-4o / deepseek</text>
-          <circle class="wf-status-running" cx="232" cy="164" r="2.5"/>
-          <circle class="wf-port" cx="160" cy="156" r="2.5"/>
-        </g>
-        <!-- Condition -->
-        <g>
-          <rect class="wf-node" x="280" y="156" width="130" height="48"/>
-          <line class="wf-icon" x1="294" y1="172" x2="294" y2="192"/>
-          <line class="wf-icon" x1="294" y1="180" x2="302" y2="174"/>
-          <line class="wf-icon" x1="294" y1="180" x2="302" y2="186"/>
-          <text class="wf-label" x="310" y="180">Condition</text>
-          <text class="wf-sublabel" x="294" y="196">if / else</text>
-          <circle class="wf-status-pending" cx="398" cy="164" r="2.5"/>
-          <circle class="wf-port" cx="345" cy="156" r="2.5"/>
-        </g>
-
-        <!-- ===== Row 3: Processing ===== -->
-        <!-- GoScript -->
-        <g>
-          <rect class="wf-node" x="40" y="244" width="130" height="46"/>
-          <circle class="wf-icon" cx="56" cy="267" r="5"/>
-          <circle class="wf-icon" cx="56" cy="267" r="2"/>
-          <text class="wf-label" x="66" y="264">GoScript</text>
-          <text class="wf-sublabel" x="56" y="284">yaegi</text>
-          <circle class="wf-status-pending" cx="158" cy="252" r="2.5"/>
-          <circle class="wf-port" cx="110" cy="244" r="2.5"/>
-        </g>
-        <!-- MCP Tool -->
-        <g>
-          <rect class="wf-node" x="190" y="244" width="130" height="46"/>
-          <circle class="wf-icon" cx="206" cy="267" r="4"/>
-          <line class="wf-icon" x1="206" y1="263" x2="206" y2="271"/>
-          <line class="wf-icon" x1="202" y1="267" x2="210" y2="267"/>
-          <text class="wf-label" x="216" y="264">MCP Tool</text>
-          <text class="wf-sublabel" x="206" y="284">external</text>
-          <circle class="wf-status-pending" cx="308" cy="252" r="2.5"/>
-          <circle class="wf-port" cx="260" cy="244" r="2.5"/>
-        </g>
-        <!-- HTTP -->
-        <g>
-          <rect class="wf-node" x="340" y="244" width="130" height="46"/>
-          <line class="wf-icon" x1="354" y1="267" x2="372" y2="267"/>
-          <polyline class="wf-icon" points="368,263 372,267 368,271"/>
-          <text class="wf-label" x="378" y="264">HTTP</text>
-          <text class="wf-sublabel" x="354" y="284">webhook</text>
-          <circle class="wf-status-pending" cx="458" cy="252" r="2.5"/>
-          <circle class="wf-port" cx="410" cy="244" r="2.5"/>
-        </g>
-
-        <!-- ===== Row 4: Output ===== -->
-        <g>
-          <rect class="wf-node-output" x="190" y="332" width="140" height="38"/>
-          <circle class="wf-icon" cx="210" cy="351" r="6"/>
-          <polyline class="wf-icon" points="207,351 210,354 215,348" fill="none"/>
-          <text class="wf-label" x="222" y="355">Output</text>
-          <circle class="wf-status-pending" cx="318" cy="340" r="2.5"/>
-          <circle class="wf-port" cx="260" cy="332" r="2.5"/>
-        </g>
-
-        <!-- ===== Layer labels ===== -->
-        <text x="8" y="68" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">COLLECT</text>
-        <text x="8" y="150" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">ANALYZE</text>
-        <text x="8" y="238" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">PROCESS</text>
-        <text x="8" y="326" fill="rgba(255,255,255,0.12)" font-size="6.5" font-family="var(--font)" letter-spacing="1.5" font-weight="600">OUTPUT</text>
-      </svg>
+      <img src="home.png" alt="SREFlow 产品界面" style="height: 100%; max-width: 100%; border-radius: 16px; border: 1px solid var(--border);">
     </div>
-  </div>
-</section>
-
-<!-- Hero 产品截图 -->
-<section style="padding: 40px 0 80px; text-align: center;">
-  <div class="container">
-    <img src="home.png" alt="SREFlow 产品界面" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
   </div>
 </section>
 
@@ -863,6 +678,36 @@
           <span class="compare-tag">✓ 路径可审计</span>
           <span class="compare-tag">✓ 经验可复用</span>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== AI Agent Pain Points ==================== -->
+<section id="agent-pain-points" class="pain-section">
+  <div class="container">
+    <span class="section-label">AI Agent 的坑</span>
+    <h2 class="section-title">Agent 很好，<span class="text-gradient">但现实很骨感</span></h2>
+    <p class="section-desc">大模型驱动的 Agent 看似美好，落地时却处处是坑。</p>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-number">1</div>
+        <h3>非确定性</h3>
+        <p>给 Agent 同样的输入，它可能给出不同的输出。更糟糕的是，它可能走不同的执行路径——这次调用了工具 A，下次调用了工具 B。</p>
+        <span class="pain-highlight">传统的单元测试在这里几乎无效。你无法断言"输入 X 必然得到输出 Y"，因为 Agent 的行为本质上是不确定的。</span>
+      </div>
+      <div class="pain-card">
+        <div class="pain-number">2</div>
+        <h3>黑盒执行</h3>
+        <p>Agent 内部到底做了什么？调了哪个 API？用了什么参数？为什么走了这条路径而不是那条？</p>
+        <span class="pain-highlight">没有可观测性工具，你就是在盲人摸象。出了问题不知道错在哪，优化也无从下手。</span>
+      </div>
+      <div class="pain-card">
+        <div class="pain-number">3</div>
+        <h3>安全风险</h3>
+        <p>Agent 有能力执行真实世界的操作——发邮件、转账、删数据库。如果它产生幻觉，后果不堪设想。</p>
+        <span class="pain-highlight">你需要人类在关键节点做决策。但如何在"自动化效率"和"人工审核"之间找到平衡点？</span>
       </div>
     </div>
   </div>
