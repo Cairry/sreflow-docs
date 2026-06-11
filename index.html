@@ -820,7 +820,7 @@
       <div class="pain-card">
         <div class="pain-number">3</div>
         <h3>LLM Agent 懂推理，但不了解业务</h3>
-        <p>当前市面上的 SRE Agent 普遍采用 LLM 推理 + Tool Calling 模式，但大模型并不了解你的架构与业务。</p>
+        <p>当前市面上的 SRE Agent 普遍采用 LLM 推理 + Tool Calling 模式，但大模型并不了解你们业务的常规排障手法。</p>
         <span class="pain-highlight">同一个告警，不同时间可能走完全不同的分析路径，无法沉淀为标准化流程；缺乏"老手直觉"，广撒网式排查而非精准定位。</span>
       </div>
     </div>
@@ -841,13 +841,12 @@
         <p class="compare-subtitle">黑盒 · 不可控 · 不可复现</p>
         <div class="compare-flow">
           <span style="color:#ff8a8a;">告警</span> → LLM 推理 → 调用工具 A/B/C → 给出结论<br>
-          <span style="color:rgba(255,255,255,0.3);">// 不了解架构，广撒网式排查</span>
+          <span style="color:rgba(255,255,255,0.3);">// 不了解架构体系，广撒网式排查</span>
         </div>
         <div>
-          <span class="compare-tag">⚠ 不了解架构</span>
-          <span class="compare-tag">⚠ 不了解业务</span>
+          <span class="compare-tag">⚠ 不了解架构体系</span>
           <span class="compare-tag">⚠ 路径不可复现</span>
-          <span class="compare-tag">⚠ 知识无法沉淀</span>
+          <span class="compare-tag">⚠ 排障路线不固定</span>
         </div>
       </div>
       <div class="compare-card good">
@@ -943,6 +942,16 @@
         <p>内置 Model Context Protocol 服务端，LLM Agent 可直接调用编排工作流，实现 AI 原生集成。</p>
       </div>
       <div class="feature-card">
+        <div class="feature-icon mono">🤖</div>
+        <h3>Agent 智能体</h3>
+        <p>内置 AI Agent 节点，支持自主推理、多步决策与工具调用，在 Workflow 中嵌入智能体实现端到端自动化。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon mono">🎯</div>
+        <h3>Skill 技能体系</h3>
+        <p>可插拔的 Skill 技能框架，将领域知识与操作封装为标准化技能单元，支持复用、组合与版本管理。</p>
+      </div>
+      <div class="feature-card">
         <div class="feature-icon mono">🏢</div>
         <h3>多租户 Workspace</h3>
         <p>工作空间级别的资源隔离，集成与工作流按空间管理，满足多团队协作需求。</p>
@@ -975,7 +984,7 @@
 <section id="nodes" class="nodes-section">
   <div class="container">
     <span class="section-label">内置节点</span>
-    <h2 class="section-title">四大类别，<span class="text-gradient">16+ 节点</span></h2>
+    <h2 class="section-title">四大类别，<span class="text-gradient">18+ 节点</span></h2>
     <p class="section-desc">从数据采集到智能分析，从逻辑判断到结果输出，覆盖 SRE 全场景。</p>
 
     <div class="node-categories">
@@ -996,6 +1005,8 @@
         <div class="node-category-title"><span class="emoji">🧠</span> 处理分析</div>
         <div class="node-chips">
           <div class="node-chip"><span class="chip-name">llm</span><span class="chip-desc">大模型推理</span></div>
+          <div class="node-chip"><span class="chip-name">agent</span><span class="chip-desc">Agent 智能体</span></div>
+          <div class="node-chip"><span class="chip-name">skill</span><span class="chip-desc">Skill 技能接入</span></div>
           <div class="node-chip"><span class="chip-name">condition</span><span class="chip-desc">条件分支</span></div>
           <div class="node-chip"><span class="chip-name">goscript</span><span class="chip-desc">Go 脚本</span></div>
           <div class="node-chip"><span class="chip-name">mcptool</span><span class="chip-desc">MCP 工具</span></div>
@@ -1023,61 +1034,13 @@
   </div>
 </section>
 
-<!-- ==================== Architecture ==================== -->
-<section id="architecture">
+<!-- Skill 技能管理截图 -->
+<section style="padding: 60px 0 100px; text-align: center;">
   <div class="container">
-    <span class="section-label">架构设计</span>
-    <h2 class="section-title">分层架构，<span class="text-gradient">职责清晰</span></h2>
-    <p class="section-desc">从前端控制台到工作流引擎，每一层独立演进。</p>
-
-    <div class="arch-diagram">
-      <svg class="arch-svg" viewBox="0 0 800 420">
-        <defs>
-          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
-          </marker>
-        </defs>
-
-        <!-- Web Console -->
-        <rect class="arch-box" x="20" y="20" width="200" height="80"/>
-        <text class="arch-label" x="120" y="52" text-anchor="middle">Web Console</text>
-        <text class="arch-sublabel" x="120" y="72" text-anchor="middle">Next.js + React Flow</text>
-
-        <!-- API Server -->
-        <rect class="arch-box" x="300" y="20" width="200" height="80"/>
-        <text class="arch-label" x="400" y="52" text-anchor="middle">API Server</text>
-        <text class="arch-sublabel" x="400" y="72" text-anchor="middle">Gin + GORM</text>
-
-        <!-- Workflow Engine -->
-        <rect class="arch-box arch-box-accent" x="580" y="20" width="200" height="80"/>
-        <text class="arch-label" x="680" y="52" text-anchor="middle">Workflow Engine</text>
-        <text class="arch-sublabel" x="680" y="72" text-anchor="middle">DAG Executor</text>
-
-        <!-- Integrations -->
-        <rect class="arch-box" x="200" y="180" width="200" height="80"/>
-        <text class="arch-label" x="300" y="212" text-anchor="middle">Integrations</text>
-        <text class="arch-sublabel" x="300" y="232" text-anchor="middle">MySQL / Redis / SQLite</text>
-
-        <!-- MCP Server -->
-        <rect class="arch-box arch-box-accent" x="480" y="180" width="200" height="80"/>
-        <text class="arch-label" x="580" y="212" text-anchor="middle">MCP Server</text>
-        <text class="arch-sublabel" x="580" y="232" text-anchor="middle">SSE / StreamableHTTP</text>
-
-        <!-- Node Implementations -->
-        <rect class="arch-box" x="100" y="320" width="600" height="80"/>
-        <text class="arch-label" x="400" y="352" text-anchor="middle">Node Implementations</text>
-        <text class="arch-sublabel" x="400" y="372" text-anchor="middle">Prometheus · Loki · Jaeger · ES · ClickHouse · K8s · SSH · LLM · GoScript · Condition · MCP · HTTP</text>
-
-        <!-- Arrows -->
-        <line class="arch-arrow" x1="220" y1="60" x2="300" y2="60"/>
-        <line class="arch-arrow" x1="500" y1="60" x2="580" y2="60"/>
-        <line class="arch-arrow" x1="400" y1="100" x2="300" y2="180"/>
-        <line class="arch-arrow" x1="680" y1="100" x2="580" y2="180"/>
-        <line class="arch-arrow" x1="680" y1="100" x2="400" y2="320"/>
-        <line class="arch-arrow" x1="300" y1="260" x2="350" y2="320"/>
-        <line class="arch-arrow" x1="580" y1="260" x2="500" y2="320"/>
-      </svg>
-    </div>
+    <span class="section-label">Skill 技能体系</span>
+    <h2 class="section-title">知识封装，<span class="text-gradient">即插即用</span></h2>
+    <p class="section-desc" style="margin: 0 auto 36px;">将领域经验与操作封装为可复用的 Skill，支持版本管理与灵活组合。</p>
+    <img src="skills.png" alt="SREFlow Skill 技能管理" style="width: 100%; max-width: 1000px; border-radius: 16px; border: 1px solid var(--border);">
   </div>
 </section>
 
