@@ -434,6 +434,87 @@
     .copy-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
     .copy-btn.copied { color: #4ade80; }
 
+    /* ========== Pricing ========== */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; margin-top: 48px; align-items: start;
+    }
+    @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; } }
+    .pricing-card {
+      padding: 36px 32px; border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      position: relative;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.06);
+    }
+    .pricing-card.featured {
+      border-color: rgba(255,255,255,0.3);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), var(--bg-card));
+      box-shadow: 0 0 40px rgba(255,255,255,0.04);
+    }
+    .pricing-card.featured:hover {
+      border-color: rgba(255,255,255,0.5);
+    }
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 4px 16px; border-radius: 20px;
+      background: #fff; color: #000;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .pricing-name {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;
+    }
+    .pricing-desc {
+      color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 24px;
+    }
+    .pricing-price {
+      font-size: 2.5rem; font-weight: 900; margin-bottom: 4px;
+    }
+    .pricing-price .unit {
+      font-size: 0.9rem; font-weight: 500; color: var(--text-muted);
+    }
+    .pricing-note {
+      color: var(--text-muted); font-size: 0.82rem; margin-bottom: 28px;
+    }
+    .pricing-features {
+      list-style: none; margin-bottom: 32px;
+    }
+    .pricing-features li {
+      padding: 8px 0; font-size: 0.9rem; color: var(--text-muted);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .pricing-features li .check {
+      flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(74,222,128,0.1); color: #4ade80;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; margin-top: 2px;
+    }
+    .pricing-features li .limit {
+      flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; margin-top: 2px;
+    }
+    .pricing-btn {
+      display: block; width: 100%; padding: 14px; border-radius: 10px;
+      text-align: center; font-weight: 600; font-size: 0.95rem;
+      transition: all 0.25s; cursor: pointer; border: none;
+    }
+    .pricing-btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .pricing-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.06); }
+    .pricing-btn-primary {
+      background: #fff; color: #000;
+      box-shadow: 0 4px 20px rgba(255,255,255,0.15);
+    }
+    .pricing-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 30px rgba(255,255,255,0.2); }
+
     /* ========== Pain Points ========== */
     .pain-section { background: rgba(5,5,5,0.9); }
     .pain-grid {
@@ -582,6 +663,29 @@
 </head>
 <body>
 
+<!-- ==================== Nav ==================== -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#fff"/>
+        <path d="M8 12h4v8H8zM14 8h4v16h-4zM20 14h4v6h-4z" fill="#000"/>
+      </svg>
+      SREFlow
+    </a>
+    <div class="nav-links">
+      <a href="#features">特性</a>
+      <a href="#nodes">节点</a>
+      <a href="#pricing">定价</a>
+      <a href="#quickstart">部署</a>
+      <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="nav-github">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        反馈
+      </a>
+    </div>
+  </div>
+</nav>
+
 <!-- ==================== Hero ==================== -->
 <section class="hero">
   <div class="hero-grid"></div>
@@ -594,16 +698,6 @@
         将告警响应、故障诊断与根因分析编排为可复用的 Workflow。<br>
         从第一个 Workflow 开始，让告警响应快人一步。
       </p>
-      <div class="hero-actions fade-up fade-up-d3">
-        <a href="#quickstart" class="btn btn-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          快速开始
-        </a>
-        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-outline">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          意见反馈
-        </a>
-      </div>
     </div>
     <!-- Hero Workflow Visual -->
     <div class="hero-visual" aria-hidden="true">
@@ -928,6 +1022,66 @@
   </div>
 </section>
 
+<!-- ==================== Pricing ==================== -->
+<section id="pricing">
+  <div class="container">
+    <span class="section-label">定价方案</span>
+    <h2 class="section-title">灵活定价，<span class="text-gradient">按需选择</span></h2>
+    <p class="section-desc">从免费体验到企业买断，找到最适合你的方案。</p>
+
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="pricing-name">开源体验版</div>
+        <div class="pricing-desc">适合个人开发者快速体验，零成本上手 SRE 自动化。</div>
+        <div class="pricing-price">免费</div>
+        <div class="pricing-note">永久免费，数量有限</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 最多 2 个 Workflow, Skill, MCP</li>
+          <li><span class="check">✓</span> 所有内置节点可用</li>
+          <li><span class="check">✓</span> 1 个 Workspace</li>
+          <li><span class="limit">—</span> 社区支持</li>
+        </ul>
+        <a href="#quickstart" class="pricing-btn pricing-btn-outline">免费开始</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">最受欢迎</div>
+        <div class="pricing-name">专业订阅版</div>
+        <div class="pricing-desc">适合团队日常使用，不限数量 + 持续更新 + 轻量定制。</div>
+        <div class="pricing-price"><span class="unit">¥</span>298 <span class="unit">/ 年</span></div>
+        <div class="pricing-note">早鸟价，随时恢复原价</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 无任何数量限制</li>
+          <li><span class="check">✓</span> 所有节点 + Agent / Skill</li>
+          <li><span class="check">✓</span> 多 Workspace 支持</li>
+          <li><span class="check">✓</span> <strong>持续版本更新</strong>，第一时间获得新功能</li>
+          <li><span class="check">✓</span> <strong>小需求定制化</strong>，按需调整适配你的场景</li>
+          <li><span class="check">✓</span> 优先技术支持</li>
+        </ul>
+        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="pricing-btn pricing-btn-primary">联系咨询</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="pricing-name">企业买断版</div>
+        <div class="pricing-desc">适合对数据安全与自主可控有严格要求的企业客户。</div>
+        <div class="pricing-price"><span class="unit">¥</span>698 <span class="unit">/ 永久</span></div>
+        <div class="pricing-note">一次付费，永久授权</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 专业版全部功能</li>
+          <li><span class="check">✓</span> <strong>完整源代码交付</strong></li>
+          <li><span class="check">✓</span> 私有化部署，数据完全自主</li>
+          <li><span class="check">✓</span> 自由二次开发与深度定制</li>
+          <li><span class="check">✓</span> 专属技术对接与交付支持</li>
+        </ul>
+        <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="pricing-btn pricing-btn-outline">联系咨询</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ==================== Quick Start ==================== -->
 <section id="quickstart" class="nodes-section">
   <div class="container">
@@ -1026,14 +1180,8 @@
 <!-- ==================== CTA ==================== -->
 <section class="cta-section">
   <div class="container">
-    <h2 class="section-title">准备好 <span class="text-gradient">重新定义</span> 你的 SRE 工作流了吗？</h2>
+    <h2 class="section-title">准备好开始 <span class="text-gradient">重新定义</span> 你的 SRE 工作流了吗？</h2>
     <p class="section-desc">从第一个 Workflow 开始，让告警响应快人一步。</p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-      <a href="https://cxduvu5qtex.feishu.cn/share/base/form/shrcnSi8zWJB4BVl2xB5CWNZPih" target="_blank" class="btn btn-outline">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        意见反馈
-      </a>
-    </div>
   </div>
 </section>
 
